@@ -1,28 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Home from './views/home.js';
-import Profile from './views/profile.js';
+import CatList from './views/cat-list.js';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState(< Home/>);
+  const [currentView, setCurrentView] = useState(< CatList catInfo={catInfo}/>);
+  const [catInfo, setCatInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true)
 
-  function homeTouch(event) {
-    setCurrentView(< Home />)
+
+
+  function catPress(event) {
+    setCurrentView(< CatList catInfo={catInfo} />)
   }
 
-  function profileTouch(event) {
-    setCurrentView(< Profile />)
-  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Cat-a-Gram</Text>
+      <View style={styles.header}>
+        <Text style={styles.header}>CATegories</Text>
+      </View>
       {currentView}
       <View style={styles.navbarContainer}>
-        <FontAwesome5 name="home" size={40} color="black" onPress={homeTouch} />
-        <FontAwesome5 name="user-circle" size={40} color="black" onPress={profileTouch} />
+        <FontAwesome5 name="cat" size={40} color="black" onPress={catPress} />
       </View>
       <StatusBar style="auto" />
     </View>
