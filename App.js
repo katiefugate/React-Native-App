@@ -5,18 +5,34 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import CatList from './views/cat-list.js';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState(< CatList catInfo={catInfo}/>);
+  const [currentView, setCurrentView] = useState(null);
   const [catInfo, setCatInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
 
-
+  useEffect(() => {
+    const init = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': '13ac2e7c-3a0a-4430-9b8f-e916a6297cd6'
+      }
+    }
+    fetch('https://api.thecatapi.com/v1/breeds?attach_breed=0', init)
+      .then(response => response.json())
+      .then(body => {
+        setCatInfo(body);
+        setIsLoading(false);
+        setCurrentView(< CatList catInfo={body} />)
+      })
+  }, [])
 
   function catPress(event) {
     setCurrentView(< CatList catInfo={catInfo} />)
   }
 
 
-  return (
+  return isLoading
+    ? <Text>Loading...</Text>
+    : (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.header}>CATegories</Text>
