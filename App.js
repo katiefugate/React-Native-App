@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import CatList from './views/cat-list.js';
+import BreedInfo from './views/breed-info.js';
 
 export default function App() {
   const [currentView, setCurrentView] = useState(null);
   const [catInfo, setCatInfo] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const [pressedBreed, setPressedBreed] = useState(null);
 
   useEffect(() => {
     const init = {
@@ -21,12 +23,19 @@ export default function App() {
       .then(body => {
         setCatInfo(body);
         setIsLoading(false);
-        setCurrentView(< CatList catInfo={body} />)
+        setCurrentView(< CatList catInfo={body} pressedCat={pressedCat} />)
       })
   }, [])
 
   function catPress(event) {
-    setCurrentView(< CatList catInfo={catInfo} />)
+    setCurrentView(< CatList pressedCat={pressedCat} catInfo={catInfo} />)
+  }
+
+  function pressedCat(catPressed) {
+    const pressedInfo = catInfo.filter(cat => cat.name === catPressed);
+    console.log(pressedInfo);
+    setPressedBreed(catPressed);
+    setCurrentView(< BreedInfo cat={pressedInfo[0]}/>)
   }
 
 
