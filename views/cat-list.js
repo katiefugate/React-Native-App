@@ -1,24 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableHighlight } from "react-native";
 
 function CatList(props) {
-  [catInfo, setCatInfo] = useState(null);
-  [isLoading, setIsLoading] = useState(true);
+  [catInfo, setCatInfo] = useState(props.catInfo);
 
-  useEffect(() => {
-    const init = {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': '13ac2e7c-3a0a-4430-9b8f-e916a6297cd6'
-      }
-    }
-    fetch('https://api.thecatapi.com/v1/breeds?attach_breed=0', init)
-      .then(response => response.json())
-      .then(body => {
-        setCatInfo(body);
-        setIsLoading(false);
-      })
-  }, [])
 
   function RenderCatList() {
     const catList = catInfo.map(cat => {
@@ -26,21 +11,26 @@ function CatList(props) {
         return null
       }
       return (
-        <View key={cat.name}>
+        <View key={cat.name} id={cat.name}>
           <Text style={{textAlign: "center", fontWeight: "bold", fontSize: 20, margin: 20}}>{cat.name}</Text>
-          <Image source={{uri: cat.image.url}} style={{width: 375, height: 350}}></Image>
+          <TouchableHighlight onPress={(event) => { props.pressedCat(cat.name) }}>
+            <Image source={{ uri: cat.image.url }} style={{ width: 375, height: 350 }}></Image>
+          </TouchableHighlight>
         </View>
       )
     })
     return catList;
   }
-  return isLoading
-    ? <Text>Loading...</Text>
-    : (
-    <ScrollView style={{marginTop: 82, marginBottom: 100}}>
-      <Text style={{fontWeight: "bold", fontSize: 40, textAlign: "center", margin: 25}}>BREEDS</Text>
-    {RenderCatList()}
-    </ScrollView>
-  )
+
+  if (catInfo === null) {
+    return <Text>Loading...</Text>
+  } else {
+    return (
+      <ScrollView style={{marginTop: 82, marginBottom: 100}} showsVerticalScrollIndicator={false}>
+        <Text style={{fontWeight: "bold", fontSize: 40, textAlign: "center", margin: 25}}>BREEDS</Text>
+        {RenderCatList()}
+      </ScrollView>
+    )
+  }
 }
  export default CatList;

@@ -3,20 +3,45 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import CatList from './views/cat-list.js';
+import BreedInfo from './views/breed-info.js';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState(< CatList catInfo={catInfo}/>);
+  const [currentView, setCurrentView] = useState(null);
   const [catInfo, setCatInfo] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const [pressedBreed, setPressedBreed] = useState(null);
 
-
+  useEffect(() => {
+    const init = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': '13ac2e7c-3a0a-4430-9b8f-e916a6297cd6'
+      }
+    }
+    fetch('https://api.thecatapi.com/v1/breeds?attach_breed=0', init)
+      .then(response => response.json())
+      .then(body => {
+        setCatInfo(body);
+        setCurrentView(< CatList catInfo={body} pressedCat={pressedCat} />)
+      })
+      .then(done => setIsLoading(false))
+  }, [])
 
   function catPress(event) {
-    setCurrentView(< CatList catInfo={catInfo} />)
+    setCurrentView(< CatList pressedCat={pressedCat} catInfo={catInfo} />)
+  }
+
+  function pressedCat(catPressed) {
+    console.log(catInfo)
+    const pressedInfo = catInfo.filter(cat => cat.name === catPressed);
+    setPressedBreed(catPressed);
+    setCurrentView(< BreedInfo cat={pressedInfo[0]}/>)
   }
 
 
-  return (
+  return isLoading
+    ? <Text>Loading...</Text>
+    : (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.header}>CATegories</Text>
