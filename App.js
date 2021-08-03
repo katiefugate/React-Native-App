@@ -22,9 +22,9 @@ export default function App() {
       .then(response => response.json())
       .then(body => {
         setCatInfo(body);
-        setIsLoading(false);
         setCurrentView(< CatList catInfo={body} pressedCat={pressedCat} />)
       })
+      .then(done => setIsLoading(false))
   }, [])
 
   function catPress(event) {
@@ -32,8 +32,8 @@ export default function App() {
   }
 
   function pressedCat(catPressed) {
+    console.log(catInfo)
     const pressedInfo = catInfo.filter(cat => cat.name === catPressed);
-    console.log(pressedInfo);
     setPressedBreed(catPressed);
     setCurrentView(< BreedInfo cat={pressedInfo[0]}/>)
   }

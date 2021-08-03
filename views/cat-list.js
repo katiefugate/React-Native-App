@@ -26,7 +26,7 @@ function CatList(props) {
     return <Text>Loading...</Text>
   } else {
     return (
-      <ScrollView style={{marginTop: 82, marginBottom: 100}}>
+      <ScrollView style={{marginTop: 82, marginBottom: 100}} showsVerticalScrollIndicator={false}>
         <Text style={{fontWeight: "bold", fontSize: 40, textAlign: "center", margin: 25}}>BREEDS</Text>
         {RenderCatList()}
       </ScrollView>
