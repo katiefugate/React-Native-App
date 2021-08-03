@@ -36,14 +36,15 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     marginBottom: 100,
-    marginTop: 100,
+    marginTop: 82,
     marginLeft: 10,
     marginRight: 10
   },
   name: {
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 35
+    fontSize: 35,
+    marginTop: 15
   },
   temperament: {
     textAlign: 'center',
