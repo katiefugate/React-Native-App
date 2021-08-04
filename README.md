@@ -1,2 +1,2 @@
 # React-Native-App
-React Native
+CATegories in React Native.
